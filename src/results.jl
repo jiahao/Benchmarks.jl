@@ -79,7 +79,9 @@ function Base.show(io::IO, r::Results)
     allocs = fld(s.num_allocations[i], convert(Int, s.n_evals[i]))
 
     @printf(io, "%s %.2f ns\n", lpad("Average elapsed time:", 24), m)
-    @printf(io, "%s [%.2f ns, %.2f ns]\n", lpad("95% CI for average:", 24), lower, upper)
+    if isnan(lower) #Only one sample
+        @printf(io, "%s [%.2f ns, %.2f ns]\n", lpad("95% CI for average:", 24), lower, upper)
+    end
     @printf(io, "%s %.2f ns\n", lpad("Minimum elapsed time:", 24), min)
     @printf(io, "%s %.2f%%\n", lpad("GC time:", 24), gc_pct)
     @printf(io, "%s %d bytes\n", lpad("Memory allocated:", 24), bytes)
